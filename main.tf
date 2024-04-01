@@ -29,6 +29,12 @@ resource "aws_instance" "NewMyServ" {
 user_data     =  "${file("script.sh")}"
 }
 
+resource "aws_security_group" "web_server_sg_tf" {
+  name        = "web-server-sg-tf"
+  description = "Allow HTTP/S and SSH to web server"
+  vpc_id      = data.aws_vpc.default.id
+}
+
 data "aws_vpc" "default" {
   default = true
 }
