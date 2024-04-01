@@ -54,6 +54,21 @@ jobs:
       - name: Configure AWS Credentials 2
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: us-east-2
-          aws-access-key-id: ${{ steps.creds.outputs.aws-access-key-id }}
-          aws-secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
+          aws-region: eu-north-1
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        run: terraform plan -lock=false
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve -lock=false
