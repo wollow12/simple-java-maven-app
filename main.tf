@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket         = "staticwebbucket.com"
-    key            = "state/terraform.tfstate"
+    key            = "state1/terraform.tfstate"
     region         = "eu-north-1"
     encrypt        = true
     dynamodb_table = "tf-test"
