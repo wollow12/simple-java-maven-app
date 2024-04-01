@@ -15,7 +15,7 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build:
+  delivery:
 
     runs-on: ubuntu-latest
 
@@ -41,3 +41,19 @@ jobs:
           build-args: VERSION=${{github.run_number}}
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project:${{github.run_number}} , ${{ secrets.DOCKERHUB_USERNAME }}/project:latest
+
+  deployment:
+    needs: delivery
+    name: Deploy
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform
+
+    steps:
+      - name: Configure AWS Credentials 2
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: us-east-2
+          aws-access-key-id: ${{ steps.creds.outputs.aws-access-key-id }}
+          aws-secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
