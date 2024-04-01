@@ -51,6 +51,9 @@ jobs:
         working-directory: .
 
     steps:
+      - name: Clone github repository
+        uses: actions/checkout@v4
+        
       - name: Configure AWS Credentials 2
         uses: aws-actions/configure-aws-credentials@v4
         with:
