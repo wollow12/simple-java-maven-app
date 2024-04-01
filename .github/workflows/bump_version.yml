@@ -1,0 +1,47 @@
+name: 'Bump Version'
+on:
+  push:
+    branches:
+      - master
+jobs:
+  bump-version:
+    name: 'Bump Version on semver'
+    runs-on: ubuntu-latest
+steps:
+      - name: 'Checkout source code'
+        uses: 'actions/checkout@v2'
+        with:
+          ref: ${{ github.ref }}
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - name: 'Automated Version Bump'
+        id: version-bump
+        uses: 'phips28/gh-action-bump-version@master'
+        with:
+          tag-prefix: 'v'
+          minor-wording:  'MINOR'
+          major-wording:  'MAJOR'
+          patch-wording:  'PATCH'
+          rc-wording:     'BETA'
+        env:
+         GITHUB_TOKEN: ${{ secrets.GH_PERSONAL_ACCESS_TOKEN }}
+      - name: 'cat package.json'
+        run: cat ./package.json
+      - name: 'PHP Version Update'
+        run: |
+         sed -i 's/\$semverversion = "[^"]*"/$semverversion = "'"${{ steps.version-bump.outputs.newTag }}"'"/' application/views/template/header.php
+         git config --global user.email "you@email.com"
+         git config --global user.name "Firstname Surname"
+         git commit -am "Update version in header"
+         git push
+      - name: 'Output Step'
+        env:
+          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+        run: echo "new tag $NEW_TAG"
+      - name: AWS CodePipeline Trigger
+        uses: zulhfreelancer/aws-codepipeline-action@v1.0.7
+        with:
+          aws-region: "eu-west-1"
+          aws-access-key: ${{ secrets.AWS_PIPELINE_ACCESS_KEY }}
+          aws-secret-key: ${{ secrets.AWS_PIPELINE_SECRET_KEY }}
+          pipeline-name: ${{ secrets.PIPELINE_NAME }}
