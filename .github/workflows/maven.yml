@@ -38,5 +38,6 @@ jobs:
         with:
           context: .
           file: ./Dockerfile
+          build-args: VERSION=${{github.run_number}}
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project:${{github.run_number}} , ${{ secrets.DOCKERHUB_USERNAME }}/project:latest
