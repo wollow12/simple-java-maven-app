@@ -29,7 +29,7 @@ resource "aws_instance" "NewMyServ" {
   vpc_security_group_ids = [aws_security_group.web_server_sg_tf.id]
   key_name               = "master_key"
   tags = {
-    Name = "${var.ec2_tag}"
+    Name = "gitlab_testServ"
   }
 user_data     =  "${file("script.sh")}"
 }
