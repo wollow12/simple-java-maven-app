@@ -17,11 +17,6 @@ terraform {
   }
 }
 
-variable "ec2_tag" {
-  type        = string
-  description = "(optional) ec2 tag/name"
-}
-
 
 resource "aws_instance" "NewMyServ" {
   ami                    = "ami-0914547665e6a707c"
