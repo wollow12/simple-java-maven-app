@@ -43,7 +43,7 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/project:${{github.run_number}} , ${{ secrets.DOCKERHUB_USERNAME }}/project:latest
 
       - name: GitLeaks check
-      - uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v2
 
   deployment:
     needs: delivery
